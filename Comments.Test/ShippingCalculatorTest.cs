@@ -10,8 +10,8 @@ public class ShippingCalculatorTest
     [Test]
     public void METHOD()
     {
-        var cost = ShippingCalculator.Cost(new Order() { ShippingType = "STANDARD"});
+        var cost = ShippingCalculator.Cost(new Order() { ShippingType = "STANDARD", WeightKg = 2 });
         
-        Assert.That(0, Is.EqualTo(cost));
+        Assert.That(1, Is.EqualTo(cost));
     }
 }

@@ -3,29 +3,29 @@
 using System;
 using System.Collections.Generic;
 
+public class ItemsList(List<OrderItem> items)
+{
+    public List<OrderItem> Items { get; } = items;
+}
+
 public class Order
 {
     private readonly List<OrderItem> _items;
+    private readonly ItemsList _itemsList;
     private readonly Customer _customer;
 
-    public Order(List<OrderItem> items, Customer customer)
+    public Order(ItemsList itemsList, Customer customer)
     {
+        var items = itemsList.Items;
         _items = items;
+        _itemsList = itemsList;
         _customer = customer;
     }
 
     public OrderSummary Summarise()
     {
         // Validation
-        if (_items == null)
-        {
-            throw new InvalidOperationException("Items cannot be null");
-        }
-
-        if (_items.Count == 0)
-        {
-            throw new InvalidOperationException("Order must contain items");
-        }
+        ValidateItems();
 
         // Subtotal calculation
         double subtotal = 0.0;
@@ -53,6 +53,19 @@ public class Order
         double total = taxableAmount + tax;
 
         return new OrderSummary(subtotal, discount, tax, total);
+    }
+
+    private void ValidateItems()
+    {
+        if (_itemsList.Items == null)
+        {
+            throw new InvalidOperationException("Items cannot be null");
+        }
+
+        if (_itemsList.Items.Count == 0)
+        {
+            throw new InvalidOperationException("Order must contain items");
+        }
     }
 }
 

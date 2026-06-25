@@ -1,22 +1,22 @@
 ﻿namespace Comments;
 
-public class X1
+public static class X1
 {
     public static int M(int lowerBound, int upperBound)
     {
-        int p = 0;
+        var p = 0;
 
-        for (int i = lowerBound; i <= upperBound; i++)
+        for (var number = lowerBound; number <= upperBound; number++)
         {
             // Add square of each number in the range
-            p += N(i);
+            p += SquareOf(number);
         }
 
         // Return accumulated sum
         return p;
     }
 
-    static int N(int k)
+    private static int SquareOf(int k)
     {
         // Return square of input
         return k * k;

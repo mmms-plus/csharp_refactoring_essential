@@ -28,14 +28,11 @@ public class ItemsList(List<OrderItem> items)
 
 public class Order
 {
-    private readonly List<OrderItem> _items;
     private readonly ItemsList _itemsList;
     private readonly Customer _customer;
 
     public Order(ItemsList itemsList, Customer customer)
     {
-        var items = itemsList.Items;
-        _items = items;
         _itemsList = itemsList;
         _customer = customer;
     }
@@ -47,6 +44,26 @@ public class Order
         var subtotal = _itemsList.calcSubTotal();
 
         // Discount rules
+        var discount = Discount(subtotal);
+
+        // Tax calculation
+        var (taxableAmount, tax) = TaxableAmount(subtotal, discount);
+
+        // Total calculation
+        double total = taxableAmount + tax;
+
+        return new OrderSummary(subtotal, discount, tax, total);
+    }
+
+    private static (double taxableAmount, double tax) TaxableAmount(double subtotal, double discount)
+    {
+        double taxableAmount = subtotal - discount;
+        double tax = taxableAmount * 0.20;
+        return (taxableAmount, tax);
+    }
+
+    private double Discount(double subtotal)
+    {
         double discount = 0.0;
         if (_customer.IsLoyal)
         {
@@ -57,14 +74,7 @@ public class Order
             discount = subtotal * 0.05;
         }
 
-        // Tax calculation
-        double taxableAmount = subtotal - discount;
-        double tax = taxableAmount * 0.20;
-
-        // Total calculation
-        double total = taxableAmount + tax;
-
-        return new OrderSummary(subtotal, discount, tax, total);
+        return discount;
     }
 }
 

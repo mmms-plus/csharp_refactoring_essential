@@ -1,24 +1,29 @@
 ﻿namespace Comments;
 
-public static class X1
+public class Range(int lowerBound, int upperBound)
 {
-    public static int M(int lowerBound, int upperBound)
+    public int LowerBound { get; } = lowerBound;
+    public int UpperBound { get; } = upperBound;
+
+    public int SquareOfRange()
     {
-        var p = 0;
+        var lowerBound = LowerBound;
+        var upperBound = UpperBound;
+        var sum = 0;
 
         for (var number = lowerBound; number <= upperBound; number++)
         {
-            // Add square of each number in the range
-            p += SquareOf(number);
+            sum += X1.SquareOf(number);
         }
 
-        // Return accumulated sum
-        return p;
+        return sum;
     }
+}
 
-    private static int SquareOf(int k)
+public static class X1
+{
+    public static int SquareOf(int input)
     {
-        // Return square of input
-        return k * k;
+        return input * input;
     }
 }

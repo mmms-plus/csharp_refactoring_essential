@@ -6,6 +6,24 @@ using System.Collections.Generic;
 public class ItemsList(List<OrderItem> items)
 {
     public List<OrderItem> Items { get; } = items;
+
+    public void ValidateItems()
+    {
+        if (Items == null)
+        {
+            throw new InvalidOperationException("Items cannot be null");
+        }
+
+        if (Items.Count == 0)
+        {
+            throw new InvalidOperationException("Order must contain items");
+        }
+    }
+
+    public double calcSubTotal()
+    {
+        return Items.Sum(item => item.Price * item.Quantity);
+    }
 }
 
 public class Order
@@ -24,15 +42,9 @@ public class Order
 
     public OrderSummary Summarise()
     {
-        // Validation
-        ValidateItems();
+        _itemsList.ValidateItems();
 
-        // Subtotal calculation
-        double subtotal = 0.0;
-        foreach (var item in _items)
-        {
-            subtotal += item.Price * item.Quantity;
-        }
+        var subtotal = _itemsList.calcSubTotal();
 
         // Discount rules
         double discount = 0.0;
@@ -53,19 +65,6 @@ public class Order
         double total = taxableAmount + tax;
 
         return new OrderSummary(subtotal, discount, tax, total);
-    }
-
-    private void ValidateItems()
-    {
-        if (_itemsList.Items == null)
-        {
-            throw new InvalidOperationException("Items cannot be null");
-        }
-
-        if (_itemsList.Items.Count == 0)
-        {
-            throw new InvalidOperationException("Order must contain items");
-        }
     }
 }
 
